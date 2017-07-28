@@ -58,3 +58,25 @@ extension Token: Preparation {
         try database.delete(self)
     }
 }
+
+// Json
+extension Token: JSONConvertible {
+    convenience init(json: JSON) throws {
+        try self.init(
+            token: json.get(Token.tokenKey),
+            userId: json.get(Token.userIdKey)
+        )
+    }
+    
+    func makeJSON() throws -> JSON {
+        var json = JSON()
+        
+        try json.set(Token.tokenKey, token)
+        try json.set(Token.userIdKey, userId)
+        
+        return json
+    }
+}
+
+// Http
+extension Token: ResponseRepresentable { }

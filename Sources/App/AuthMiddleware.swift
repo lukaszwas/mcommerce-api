@@ -5,8 +5,6 @@ public final class AuthMiddleware<U: TokenAuthenticatable>: Middleware {
     public init(_ userType: U.Type = U.self) {}
     
     public func respond(to req: Request, chainingTo next: Responder) throws -> Response {
-        // if the user has already been authenticated
-        // by a previous middleware, continue
         if req.auth.isAuthenticated(U.self) {
             return try next.respond(to: req)
         }

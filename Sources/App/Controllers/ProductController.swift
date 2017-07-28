@@ -6,10 +6,6 @@ final class ProductController: ResourceRepresentable {
     // GET /
     // Get all products
     func getAllProducts(req: Request) throws -> ResponseRepresentable {
-        if !req.auth.isAuthenticated(User.self) {
-            throw Abort.unauthorized
-        }
-        
         return try Product.all().makeJSON()
     }
     
@@ -43,9 +39,8 @@ final class ProductController: ResourceRepresentable {
 
     // PATCH /:id
     // Update product
-    func update(req: Request, product: Product) throws -> ResponseRepresentable {
+    func updateProduct(req: Request, product: Product) throws -> ResponseRepresentable {
         try product.update(for: req)
-
         try product.save()
         return product
     }
@@ -56,7 +51,7 @@ final class ProductController: ResourceRepresentable {
             index: getAllProducts,
             store: createProduct,
             show: getProductWithId,
-            update: update,
+            update: updateProduct,
             destroy: deleteProduct,
             clear: deleteAllProducts
         )
