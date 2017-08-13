@@ -19,10 +19,12 @@ extension Config {
     
     // Setup preparations
     private func setupPreparations() throws {
-        preparations.append(Product.self)
-        
         // Auth
         preparations.append(User.self)
         preparations.append(Token.self)
+        
+        // Content
+        preparations.append(Product.self)
+        preparations.append(Category.self)
     }
 }

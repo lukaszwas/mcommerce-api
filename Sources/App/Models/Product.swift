@@ -70,7 +70,7 @@ extension Product: JSONConvertible {
         try json.set(Product.idKey, id)
         try json.set(Product.nameKey, name)
         try json.set(Product.descriptionKey, description)
-        
+            
         return json
     }
 }

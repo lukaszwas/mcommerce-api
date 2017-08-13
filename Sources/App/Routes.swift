@@ -12,6 +12,11 @@ extension Droplet {
             return try req.authUser().email
         }
         
+        let test1 = grouped("test1")
+        test1.get() { req in
+            return "aaaa"
+        }
+        
         // AUTH
         
         // /auth
@@ -32,6 +37,9 @@ extension Droplet {
         // /products
         try authed.resource("products", ProductController.self)
         
+        // /categories
+        let categoryController = CategoryController()
+        categoryController.makeRoutes(routes: authed)
     }
 }
 
