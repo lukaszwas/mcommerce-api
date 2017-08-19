@@ -3,6 +3,8 @@ import FluentProvider
 import HTTP
 
 final class Category: Model {
+    static let name = "Cat"
+    
     let storage = Storage()
     
     // Columns
@@ -14,11 +16,17 @@ final class Category: Model {
         return parent(id: parentId)
     }
     
+    
+    func recommendedProducts() throws -> [Product]? {
+        return try Product.makeQuery().filter(Product.self, Product.categoryIdKey, id).filter(Product.self, Product.recommendedKey, true).all()
+    }
+    
     // Column names
     static let idKey = "id"
     static let nameKey = "name"
     static let descriptionKey = "description"
     static let parentIdKey = "parent_id"
+    static let productsKey = "products"
     
     // Init
     init(
@@ -82,6 +90,18 @@ extension Category: JSONConvertible {
         try json.set(Category.nameKey, name)
         try json.set(Category.descriptionKey, description)
         try json.set(Category.parentIdKey, parentId)
+        
+        return json
+    }
+    
+    func makeJSONWithProducts() throws -> JSON {
+        var json = JSON()
+        
+        try json.set(Category.idKey, id)
+        try json.set(Category.nameKey, name)
+        try json.set(Category.descriptionKey, description)
+        try json.set(Category.parentIdKey, parentId)
+        try json.set(Category.productsKey, recommendedProducts()?.makeJSON())
         
         return json
     }

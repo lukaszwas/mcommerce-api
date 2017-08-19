@@ -35,11 +35,13 @@ extension Droplet {
         // CONTENT
         
         // /products
-        try authed.resource("products", ProductController.self)
+        ProductController().makeRoutes(routes: authed)
         
         // /categories
-        let categoryController = CategoryController()
-        categoryController.makeRoutes(routes: authed)
+        CategoryController().makeRoutes(routes: authed)
+        
+        // /categoryfilters
+        CategoryFilterController().makeRoutes(routes: authed)
     }
 }
 

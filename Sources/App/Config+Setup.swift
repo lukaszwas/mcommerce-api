@@ -24,7 +24,12 @@ extension Config {
         preparations.append(Token.self)
         
         // Content
-        preparations.append(Product.self)
         preparations.append(Category.self)
+        preparations.append(Product.self)
+        preparations.append(CategoryFilter.self)
+        preparations.append(CategoryFilterValue.self)
+        preparations.append(ProductCategoryFilterValue.self)
+        preparations.append(ProductImage.self)
+        preparations.append(ProductRate.self)
     }
 }
