@@ -17,6 +17,7 @@ final class Token: Model {
     static let idKey = "id"
     static let tokenKey = "token"
     static let userIdKey = "user_id"
+    static let userKey = "user"
     
     // Init
     init(
@@ -73,6 +74,7 @@ extension Token: JSONConvertible {
         
         try json.set(Token.tokenKey, token)
         try json.set(Token.userIdKey, userId)
+        try json.set(Token.userKey, user.first()?.makeJSON())
         
         return json
     }

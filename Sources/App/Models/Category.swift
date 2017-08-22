@@ -16,7 +16,6 @@ final class Category: Model {
         return parent(id: parentId)
     }
     
-    
     func recommendedProducts() throws -> [Product]? {
         return try Product.makeQuery().filter(Product.self, Product.categoryIdKey, id).filter(Product.self, Product.recommendedKey, true).all()
     }

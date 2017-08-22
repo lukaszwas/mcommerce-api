@@ -104,8 +104,6 @@ extension User: JSONConvertible {
         try json.set(User.emailKey, email)
         try json.set(User.firstNameKey, firstName)
         try json.set(User.lastNameKey, lastName)
-        try json.set(User.apiAccessKey, apiAccess)
-        try json.set(User.isAdminKey, isAdmin)
         
         return json
     }
