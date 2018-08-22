@@ -12,11 +12,6 @@ extension Droplet {
             return try req.authUser().email
         }
         
-        let test1 = grouped("test1")
-        test1.get() { req in
-            return "aaaa"
-        }
-        
         // AUTH
         
         // /auth
@@ -24,13 +19,14 @@ extension Droplet {
         let authGroupAuthed = authed.grouped("auth")
         
         let authController = AuthController()
+        let userController = UserController()
         
         authGroup.post("login", handler: authController.login)
         authGroupAuthed.post("logout", handler: authController.logout)
+        authGroup.post("register", handler: userController.createUser)
         
         // /users
         try authed.resource("users", UserController.self)
-
         
         // CONTENT
         

@@ -15,6 +15,7 @@ final class ProductController {
         group.patch(Product.parameter, handler: updateProduct)
         group.get("category", Category.parameter, handler: getProductsWithCategory)
         group.get("recommended", handler: getRecommendedProducts)
+        group.get("search", String.parameter, handler: searchProducts)
     }
     
     // METHODS
@@ -92,6 +93,14 @@ final class ProductController {
         try json.set("recommended", categoriesJson)
         
         return json
+    }
+    
+    // GET /search/:filter
+    // Search products
+    func searchProducts(req: Request) throws -> ResponseRepresentable {
+        let filter = try req.parameters.next(String.self)
+        
+        return try Product.makeQuery().filter("name", .contains, filter).all().makeJSON()
     }
 }
 
