@@ -8,10 +8,6 @@ extension Droplet {
         let tokenMiddleware = TokenAuthenticationMiddleware(User.self)
         let authed = grouped(tokenMiddleware)
         
-        authed.get("me") { req in
-            return try req.authUser().email
-        }
-        
         // AUTH
         
         // /auth
@@ -31,13 +27,16 @@ extension Droplet {
         // CONTENT
         
         // /products
-        ProductController().makeRoutes(routes: authed)
+        ProductController().makeRoutes(routes: self)
         
         // /categories
-        CategoryController().makeRoutes(routes: authed)
+        CategoryController().makeRoutes(routes: self)
         
         // /categoryfilters
-        CategoryFilterController().makeRoutes(routes: authed)
+        CategoryFilterController().makeRoutes(routes: self)
+        
+        // /purchase
+        PurchaseController().makeRoutes(routes: authed)
     }
 }
 

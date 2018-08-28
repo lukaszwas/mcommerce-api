@@ -31,5 +31,8 @@ extension Config {
         preparations.append(ProductCategoryFilterValue.self)
         preparations.append(ProductImage.self)
         preparations.append(ProductRate.self)
+        preparations.append(PurchaseStatus.self)
+        preparations.append(Purchase.self)
+        preparations.append(PurchaseProduct.self)
     }
 }
