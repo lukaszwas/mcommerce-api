@@ -68,9 +68,15 @@ final class PurchaseController {
         let createCustomer = try stripeClient.customer.create(email: user.email)
         let customer = try createCustomer.serializedResponse()
         
-        try stripeClient.customer.addCard(customer: customer.id!, number: paymentInfo.cardNumber, expMonth: paymentInfo.cardExpirationMonth, expYear: paymentInfo.cardExpirationYear, cvc: paymentInfo.cardExpirationCvc)
+        let addCard = try stripeClient.customer.addCard(customer: customer.id!, number: paymentInfo.cardNumber, expMonth: paymentInfo.cardExpirationMonth, expYear: paymentInfo.cardExpirationYear, cvc: paymentInfo.cardExpirationCvc)
+        let cardResponse = try addCard.serializedResponse()
         
-        try stripeClient.charge.create(amount: Int(price), in: .usd, for: ChargeType.customer(customer.id!), description: "")
+        let charge = try stripeClient.charge.create(amount: Int(price), in: .usd, for: ChargeType.customer(customer.id!), description: "")
+        let chargeResponse = try charge.serializedResponse()
+        
+        // change purchase status
+        purchase.statusId = 2
+        try purchase.save()
         
         return "ok"
     }
