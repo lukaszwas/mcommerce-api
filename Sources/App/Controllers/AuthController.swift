@@ -4,6 +4,7 @@ import Foundation
 
 // /auth
 final class AuthController {
+    
     // POST /login
     // Login
     func login(req: Request) throws -> ResponseRepresentable {

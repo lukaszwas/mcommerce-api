@@ -12,6 +12,7 @@ final class PurchaseController {
         group.get(Purchase.parameter, handler: getPurchaseDetails)
         group.post(handler: createPurchase)
         group.post("addproduct", handler: addProduct)
+        group.post("pay", Purchase.parameter, handler: pay)
     }
     
     // METHODS
@@ -45,6 +46,35 @@ final class PurchaseController {
         return purchase
     }
     
+    // POST /pay
+    // Purchase payment
+    func pay(req: Request) throws -> ResponseRepresentable {
+        let paymentInfo = try req.payment()
+        let purchase = try req.parameters.next(Purchase.self)
+        
+        let products = try purchase.products.all()
+        
+        var price: Float = 0
+        for product in products {
+            price += product.price
+        }
+        price *= 100
+        
+        let user = try req.auth.assertAuthenticated(User.self)
+        
+        let stripeClient = try StripeClient(apiKey: "sk_test_QYeVSjIJJ5HNIujPjrUALzH0")
+        stripeClient.initializeRoutes()
+        
+        let createCustomer = try stripeClient.customer.create(email: user.email)
+        let customer = try createCustomer.serializedResponse()
+        
+        try stripeClient.customer.addCard(customer: customer.id!, number: paymentInfo.cardNumber, expMonth: paymentInfo.cardExpirationMonth, expYear: paymentInfo.cardExpirationYear, cvc: paymentInfo.cardExpirationCvc)
+        
+        try stripeClient.charge.create(amount: Int(price), in: .usd, for: ChargeType.customer(customer.id!), description: "")
+        
+        return "ok"
+    }
+    
     // POST /
     // Add product to purchase
     func addProduct(req: Request) throws -> ResponseRepresentable {
@@ -64,6 +94,11 @@ extension Request {
     func purchaseProduct() throws -> PurchaseProduct {
         guard let json = json else { throw Abort.badRequest }
         return try PurchaseProduct(json: json)
+    }
+    
+    func payment() throws -> Payment {
+        guard let json = json else { throw Abort.badRequest }
+        return try Payment(json: json)
     }
 }
 
